@@ -41,16 +41,19 @@
     const createData = function () {
       let title = $('input[name="title"]').val()
       let price = $('input[name="price"]').val()
+      let category = $('#select_category').val()
 
-      if (!title || !price) {
+      if (!title || !price || !category) {
         console.log('Invalid body')
       }
       $.post('http://localhost:3000/bills/', {
         title: title,
-        price: price
+        price: price,
+        category: category
       }, function(result){
         $('input[name="title"]').val('')
         $('input[name="price"]').val('')
+        $('#select_category').val('')
         listData()
       })
     }
