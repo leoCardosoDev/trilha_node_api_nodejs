@@ -23,6 +23,20 @@
 
       })
     }
+
+    const populateCategory = function(){
+      $('#select_category').empty()
+      $.get('http://localhost:3000/categories/', function(result){
+        if (!result.data.length && !result.status) {
+          return
+        }
+        result.data.forEach(function (category) {
+          let tmpl =
+            '<option value="'+ category._id +'">' + category.name + '</option>'
+          $('#select_category').append(tmpl)
+        })
+      })
+    }
     
     const createData = function () {
       let title = $('input[name="title"]').val()
@@ -41,6 +55,19 @@
       })
     }
 
+    const createDataCat = function () {
+      let name = $('input[name="name"]').val()
+      if (!name) {
+        console.log('Invalid body')
+      }
+      $.post('http://localhost:3000/categories/', {
+        name: name
+      }, function(result){
+        $('input[name="name"]').val('')
+        populateCategory()
+      })
+    }
+
     const removeData = function(){
       let id = $(this).data('id')
       $.ajax({
@@ -53,7 +80,9 @@
     }
 
     listData()
+    populateCategory()
     $('#btn_create').on('click', createData)
+    $('#btn_create_cat').on('click', createDataCat)
     $('#list_table tbody').on('click', '#btn_delete', removeData)
   })
 
